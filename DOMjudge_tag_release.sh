@@ -1,12 +1,11 @@
 #!/bin/bash
 
-. release.env
-
-for i in `git tag | grep 7`; do git tag -d $i; done
+. ./release.env
 
 DOWNLOAD_RELEASE_SCRIPT=""
 
 notify_channel () {
+    logger $1
     # Optionally notify the Slack channel
     # that a build has been triggered
 }
@@ -34,6 +33,11 @@ process_tag () {
         if [ -z $DOWNLOAD_RELEASE_SCRIPT ]; then
             wget $RELEASE_WEB
             $DOWNLOAD_RELEASE_SCRIPT="done"
+        fi
+        TRUST=$(git tag -v $1)
+        if [ ! $TRUST ]; then
+            notify_channel "Untrusted tag ($1)"
+            exit 1
         fi
         ./make_release $1
         rsync -rva ./$1* $RELEASE_DIR/
