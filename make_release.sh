@@ -3,12 +3,7 @@
 # Script to create a DOMjudge release package. Release file is
 # generated in the current directory.
 
-if [ -z "${CI+x}" ]; then
-    set -e
-else
-    set -eux
-    export PS4='(${0}:): - [$?] $ '
-fi
+set -e
 
 GITURL="https://github.com/DOMjudge/domjudge.git"
 
@@ -18,13 +13,10 @@ if [ -z "$1" ]; then
 	echo "Error: missing required release tag argument."
 	exit 1
 fi
-
-if [ ! -z "${CI+x}" ]; then set +x; fi
 TAG="$1" ; shift
-if [ ! -z "${CI+x}" ]; then set -x; fi
 
-if [ -n "${1+x}" ]; then
-    GITURL="$1" ; shift
+if [ -n "$1" ]; then
+	GITURL="$1" ; shift
 fi
 
 OWD="$PWD"
@@ -41,7 +33,7 @@ CHLOG="$(grep ^Version ChangeLog | head -n 1)"
 
 # Check for non-release version
 if [ "${VERSION%DEV}" != "${VERSION}" ]; then
-    echo "WARNING: version string contains 'DEV', should probably be changed!"
+	echo "WARNING: version string contains 'DEV', should probably be changed!"
 fi
 
 CHLOG_VERSION="$(echo $CHLOG | sed -r 's/^Version ([0-9\.]+) .*$/\1/')"
@@ -67,11 +59,7 @@ mv $TEMPDIR/domjudge-$VERSION.tar.gz .
 rm -rf "$TEMPDIR"
 
 sha256sum domjudge-$VERSION.tar.gz > domjudge-$VERSION.tar.gz.sha256sum
-if [ -z "${CI+x}" ]; then
-    gpg -a --detach-sign --digest-algo SHA256 domjudge-$VERSION.tar.gz
-else
-    gpg --pinentry-mode loopback --batch --passphrase ${PASS} --detach-sign --armor --digest-algo SHA256 domjudge-$VERSION.tar.gz
-fi
+gpg -a --detach-sign --digest-algo SHA256 domjudge-$VERSION.tar.gz
 
 echo "Release file: 'domjudge-$VERSION.tar.gz'"
 echo "ChangeLog version: '$CHLOG'"
