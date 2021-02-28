@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eu
+
 . ./release.env
 
 DOWNLOAD_RELEASE_SCRIPT=""
