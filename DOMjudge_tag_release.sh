@@ -12,6 +12,16 @@ notify_channel () {
     # that a build has been triggered
 }
 
+docs_version () {
+    VERS_MIN="${1%.*}"
+    TMPFILE="/tmp/versions.json"
+    ORIGFILE="$DOCS_DIR/versions.json"
+    MAIN_PAGE="$DOCS_DIR/index.html"
+    jq '. - ["master"] + ["'"$VERS_MIN"'","master"]' < "$ORIGFILE" > "$TMPFILE"
+    mv "$TMPFILE" $ORIGFILE
+    sed "s/manual\/[[:digit:]].[[:digit:]]/manual\/$VERS_MIN/" "$MAIN_PAGE"
+}
+
 test_tarball () {
     # Happens as current side effect of docker build
     true
@@ -53,14 +63,14 @@ process_tag () {
             # This is the latest release
             #
             # TODO: Handle website update
+            docs_version "$tag"
             true
         fi
     fi
 }
 
 process_branch () {
-    while read -r tag
-    do
+    while read -r tag; do
         echo "Handling tag: $tag in branch: $1"
         process_tag "$tag"
     done <<< "$(git tag)"
@@ -72,8 +82,7 @@ git checkout master
 # The main branch is special as we also update the website
 process_branch origin/master 1
 
-while read -r branch
-do
+while read -r branch; do
     process_branch "$branch" 0
 done <<< "$(git branch -r)"
 
