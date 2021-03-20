@@ -37,7 +37,8 @@ process_tag () {
        if git verify-tag $TAG; then
            set -e
            # At this point the tarball should already be locally tested
-           ~domjudge-scripts/make_release.sh "$TAG"
+           #~domjudge-scripts/make_release.sh "$TAG"
+           ~/git/domjudge-scripts/make_release.sh "$TAG"
            mv domjudge-$TAG.* $RELEASE_DIR/
            notify_channel "Tarball finished ($TAG)."
        else
@@ -47,7 +48,8 @@ process_tag () {
 }
 
 # Reset to main branch
-cd ~domjudge/domjudge
+#cd ~domjudge/domjudge
+cd ~/git/domjudge
 git checkout $main
 
 while read -r tag; do
