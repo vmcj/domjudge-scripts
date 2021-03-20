@@ -27,9 +27,9 @@ on the account `domjudge@vm-domjudge`):
  1. On the server the tarball will be rebuild and signed.
  1. If releasing from the master branch, create a new version branch:
     ```{sh}
-        git checkout -b x.y
-        git push --set-upstream origin x.y
-        git checkout master
+    git checkout -b x.y
+    git push --set-upstream origin x.y
+    git checkout master
     ```
  1. Update files above to `{version+1}DEV`, `DEBUG=1`, and commit.
  1. Copy domjudge-$TAG.tar.gz* to `/srv/http/domjudge/releases/`
