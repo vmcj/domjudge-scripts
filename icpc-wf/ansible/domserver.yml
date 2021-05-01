@@ -39,6 +39,7 @@
         - php-intl
         - mycli
         - macchanger
+        - acl
 
     - name: copy in MySQL config
       copy: src=files/my.cnf dest=/root/.my.cnf
@@ -69,32 +70,6 @@
       copy: src=files/mysql.domjudge.cnf dest=/etc/mysql/mariadb.conf.d/zz_domjudge.cnf
       notify: restart mysql
 
-    - name: add mysql config snippet for replication
-      template: src=files/mysql.replication.cnf.j2 dest=/etc/mysql/mariadb.conf.d/zzz_replication.cnf
-      notify: restart mysql
-      when: REPLICATION_PASSWORD is defined
-
-    - name: disable mysql listen on localhost only
-      replace:
-        path: /etc/mysql/mariadb.conf.d/50-server.cnf
-        regexp: '^bind-address\s*='
-        replace: '#bind-address ='
-      when: REPLICATION_PASSWORD is defined
-
-    - name: copy script to setup replication
-      template: src=files/setup-replication.sh.j2 dest=/usr/local/sbin/setup-replication.sh mode=0755
-      when: REPLICATION_PASSWORD is defined
-
-    - name: create mysql replication user
-      mysql_user:
-        name: replication
-        host: '%'
-        password: "{{REPLICATION_PASSWORD}}"
-        append_privs: true
-        priv: '*.*:REPLICATION SLAVE'
-        state: present
-      when: REPLICATION_PASSWORD is defined
-
     - name: make sure mysql is restarted
       meta: flush_handlers
 
@@ -119,14 +94,6 @@
       command: "{{DJ_DIR}}/bin/dj_setup_database -u root bare-install"
       when: "'failed' in db_status.stdout"
 
-    - name: fix background color
-      lineinfile:
-        regexp: '^(\s*background-color):\s+white\s*;'
-        line: '\1: {{BACKGROUND_COLOR}};'
-        backrefs: yes
-        dest: "{{DJ_DIR}}/webapp/web/style.css"
-      when: BACKGROUND_COLOR is defined
-
     - name: disable developer mode
       lineinfile:
         regexp: '^APP_ENV=dev'
@@ -134,10 +101,3 @@
         dest: "{{DJ_DIR}}/webapp/.env.local"
 
     - include: nginx-setup.yml
-
-    - name: add autostart shortcuts
-      copy: src=files/{{item}}.desktop dest=/home/domjudge/.config/autostart/ owner=domjudge group=domjudge mode=0755
-      with_items:
-        - htop
-        - taillog-domserver-nginx-error
-        - taillog-domserver-symfony-error

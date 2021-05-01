@@ -6,11 +6,19 @@
 
     - include: common_tasks_packages_icpc-wf.yml
 
+    - name: Update and upgrade apt packages
+      become: true
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 #One day
+
     - name: install common required/useful packages
       tags: packages
       apt:
         state: present
         pkg:
+        - acl
         - ack-grep
         - git
         - htop
@@ -93,17 +101,6 @@
         group: domjudge
         mode: 0600
       when: DJ_GIT_SSH_KEY is defined
-
-    - name: Create SSH config
-      template: src=files/ssh-config-domjudge.j2 dest=/home/domjudge/.ssh/config owner=domjudge group=domjudge mode=0600
-      when: DJ_GIT_HOST is defined
-
-    - name: add all hosts to hosts file
-      lineinfile:
-        dest: /etc/hosts
-        regexp: '{{ item }}$'
-        line: "{{ hostvars[item].ansible_host }}	{{ item }}"
-      loop: "{{ groups['all'] }}"
 
     - name: configure domjudge logging
       copy: src=files/rsyslog.domjudge.conf dest=/etc/rsyslog.d/domjudge.conf

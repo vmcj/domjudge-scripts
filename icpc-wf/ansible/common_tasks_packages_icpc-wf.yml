@@ -1,31 +1,10 @@
 # Common packaging stuff during ICPC World Finals.
 ---
-    - name: fix apt sources list
-      tags: packages
-      replace:
-        dest: /etc/apt/sources.list
-        regexp: 'pc2\.ecs\.csus\.edu'
-        replace: 'packages'
-
-    - name: remove pycharm repo
-      tags: packages
-      replace:
-        dest: /etc/apt/sources.list
-        regexp: '^([^#].*pycharm.*)$'
-        replace: '# \1'
-
-    - name: add packages to hosts file
-      tags: packages
-      lineinfile:
-        dest: /etc/hosts
-        regexp: '^10\.3\.3\.209'
-        line: "10.3.3.209	packages"
-
-    - name: remove some packages
-      tags: packages
-      apt:
-        pkg: ntp
-        state: absent
+#    - name: remove some packages
+#      tags: packages
+#      apt:
+#        pkg: ntp
+#        state: absent
 
     - meta: flush_handlers
       tags: packages

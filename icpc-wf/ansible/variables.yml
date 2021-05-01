@@ -9,13 +9,13 @@ DJ_BRANCH: master
 
 # URL and IP of domserver from judgehosts. A hostname 'domserver' with
 # DOMSERVER_IP will be added to the judgehost /etc/hosts file.
-DOMSERVER: https://domjudge
-DOMSERVER_IP: 10.3.3.215
+DOMSERVER: https://dj.storm.vu
+DOMSERVER_IP: 130.37.193.150
 DOMSERVER_URL: "{{DOMSERVER}}"
-DOMSERVER_SSL_CERT: /etc/ssl/certs/domserver.crt
-DOMSERVER_SSL_KEY: /etc/ssl/private/domserver.key
+DOMSERVER_SSL_CERT: /etc/ssl/certs/localhost.crt
+DOMSERVER_SSL_KEY: /etc/ssl/private/localhost.key
 
-TIMEZONE: "Europe/Moscow"
+TIMEZONE: "Europe/Amsterdam"
 
 PHP_FPM_MAX_CHILDREN: 400
 PHP_FPM_MAX_REQUESTS: 500
@@ -26,7 +26,7 @@ PHP_MAX_FILE_UPLOADS: 101
 
 # Password for the MySQL replication user.
 # Set this to enable master-master replication between two domservers.
-REPLICATION_PASSWORD: some-replication-password
+#REPLICATION_PASSWORD: some-replication-password
 
 # Password for the collectd MySQL status user.
 # Set this to enable collectd for system statistics collection.
@@ -46,15 +46,15 @@ ADMIN_PASSWORD: some-admin-password
 #DJ_SHELL_USER_PW: some-hashed-password
 
 # Git repo URL
-DJ_GIT_REPO: domjudge@10.3.3.223:domjudge
+DJ_GIT_REPO: https://github.com/DOMjudge/domjudge.git
 
 # If using a Git repo which requires a SSH key, set the host and key here
-DJ_GIT_HOST: 10.3.3.223
-DJ_GIT_SSH_KEY: |
-    -----BEGIN OPENSSH PRIVATE KEY-----
-    ENTER SSH PRIVATE KEY HERE
-    -----END OPENSSH PRIVATE KEY-----
+DJ_GIT_HOST: github.com
+#DJ_GIT_SSH_KEY: |
+#    -----BEGIN OPENSSH PRIVATE KEY-----
+#    ENTER SSH PRIVATE KEY HERE
+#    -----END OPENSSH PRIVATE KEY-----
 
 
 # Key for domjudge user
-DJ_SSH_KEY: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPsTOPgh8QYBudu7IOLETq4ek13RBB+pM/spOboCK1wO domjudge@domjudge-ccsadmin1
+DJ_SSH_KEY: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAe/eK/AmBHx4cEvvmb+HBg/h9aptCvHfv9sxkdvTr07 vmcj@lenovo

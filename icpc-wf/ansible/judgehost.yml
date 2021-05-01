@@ -24,9 +24,9 @@
       user: name={{item}} createhome=no home=/nonexistent group=nogroup shell=/bin/false
       with_items:
         - domjudge-run-0
-        - domjudge-run-1
-        - domjudge-run-2
-        - domjudge-run-3
+        #- domjudge-run-1
+        #- domjudge-run-2
+        #- domjudge-run-3
     - name: create domjudge-run group
       group: name=domjudge-run state=present
 
@@ -51,12 +51,12 @@
         line: '\1'
         backrefs: yes
 
-    - name: enable internal monitor
-      file: path=/usr/share/X11/xorg.conf.d/22-icpc.conf state=absent
+    #- name: enable internal monitor
+    #  file: path=/usr/share/X11/xorg.conf.d/22-icpc.conf state=absent
 
-    - name: remove apt-transport-https from bionic debootstrap file
+    - name: remove apt-transport-https from focal debootstrap file
       lineinfile:
-        path: /usr/share/debootstrap/scripts/bionic
+        path: /usr/share/debootstrap/scripts/focal
         regexp: 'ca-certificates'
         line: '                base="$base ca-certificates"'
 
@@ -133,24 +133,9 @@
         - tune_cpu
         - domjudge-judgehost
 
-    - name: add autostart shortcuts
-      copy: src=files/{{item}}.desktop dest=/home/domjudge/.config/autostart/ owner=domjudge group=domjudge mode=0755
-      with_items:
-        - taillog
-        - rotate
-        - domjudgelogo
-
     - name: disable apport service
       service:
         name: apport
         enabled: no
         state: stopped
 
-    - name: disable systemd timers
-      command: systemctl mask {{item}}
-      args:
-        creates: /etc/systemd/system/{{item}}
-      with_items:
-        - apt-daily-upgrade.timer
-        - apt-daily.timer
-        - systemd-tmpfiles-clean.timer
