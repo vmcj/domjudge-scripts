@@ -1,6 +1,6 @@
-<!--#set    var="dj_current_branch_version"  value="7.2.1"
---><!--#set var="dj_current_branch_date"     value="6 May 2020"
---><!--#set var="dj_previous_branch_version" value="7.1.3"
+<!--#set    var="dj_current_branch_version"  value="7.3.3"
+--><!--#set var="dj_current_branch_date"     value="5 April 2021"
+--><!--#set var="dj_previous_branch_version" value="7.2.1"
 --><!--#set var="dj_previous_branch_date"    value="6 May 2020"
 --><!--#set var="dj_rc_branch_version"       value="6.0.0RC1"
 --><!--#set var="dj_rc_branch_date"          value="30 July 2018"--><!DOCTYPE html>
@@ -53,8 +53,8 @@
   </nav>
 </header>
 
-<img src="DOMjudgelogo_sc.png" alt="DOMjudge logo"
-	width="80" height="169" id="domjudgeLogo" class="float-right d-none d-md-block" />
+<img src="DOMjudgelogo.svg" alt="DOMjudge logo"
+	width="80" height="169" id="domjudgeLogo" class="float-right d-none d-md-block">
 
 <main class="container">
 

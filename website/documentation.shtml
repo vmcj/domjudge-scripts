@@ -18,9 +18,16 @@ state as well as perform certain actions, such as submit solutions
 and control contest state (with admin role).</p>
 
 <p>The DOMjudge API is an implementation of the ICPC
-<a href="https://clics.ecs.baylor.edu/index.php/Contest_API">Contest API</a>
+<a href="https://ccs-specs.icpc.io/contest_api">Contest API</a>
 (except that it does not (yet) implement the optional <code>team-members</code>
 endpoint). It also has some extensions, see the
 <a href="demoweb/api/doc">internal API documentation</a>.</p>
+
+<h2>Wiki</h2>
+
+<p>We also have the
+<a href="https://github.com/DOMjudge/domjudge/wiki">DOMjudge wiki</a>
+which collects other pieces of information about specific configurations
+or integrations.</p>
 
 <!--#include virtual="/footer.shtml" -->
