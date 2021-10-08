@@ -12,6 +12,7 @@
         state: present
         pkg:
         - ack
+        - acl
         - git
         - htop
         - httpie

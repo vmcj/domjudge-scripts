@@ -141,7 +141,7 @@
     - name: make sure the database is configured
       command: "{{DJ_DIR}}/bin/dj_setup_database -u root bare-install"
       when: "'failed' in db_status.stdout"
-
+ 
     - name: disable developer mode
       lineinfile:
         regexp: '^APP_ENV=dev'
@@ -158,55 +158,64 @@
         use_ssh_args: true
         rsync_path: sudo rsync
 
-    - include: nginx-setup.yml
-
-    - name: Add documentation in DOMjudge team interface
-      copy: src=files/docs.yaml dest=/opt/domjudge/etc/docs.yaml
-
-    - name: Get NGINX status
-      copy: src=files/grafana/nginx-status.conf dest=/etc/nginx/sites-enabled/status.conf
-      notify: restart nginx
-
-    - name: Prometheus nginx exporter
-      lineinfile:
-        dest: /etc/default/prometheus-nginx-exporter
-        state: present
-        regexp: '^ARGS=""'
-        line: 'ARGS="-nginx.scrape-uri=http://localhost:8080/basic_status"'
-      notify: restart nginx-exporter
-
-    - name: Install PHP-fpm exporter binary
-      ansible.builtin.unarchive:
-        src: files/grafana/php-fpm_exporter_2.0.3_linux_amd64.tar.gz
-        dest: /usr/bin/
-        exclude:
-          - LICENSE
-          - README.md
-
-    - name: Export PHP-FPM metrics
-      copy: src=files/grafana/php-fpm-exporter.service dest=/etc/systemd/system/php-fpm-exporter.service
-      notify: restart php-exporter
-
-    - name: add autostart shortcuts
-      copy: src=files/{{item}}.desktop dest=/home/domjudge/.config/autostart/ owner=domjudge group=domjudge mode=0755
-      with_items:
-        - htop
-        - taillog-domserver-nginx-error
-        - taillog-domserver-symfony-error
-
-    - name: Configure keepalived for domjudge IP failover
-      template:
-        src: files/keepalived.conf.j2
-        dest: /etc/keepalived/keepalived.conf
-      when: REPLICATION_PASSWORD is defined
-
-    - name: Start but disable keepalived (so it does not fail back to primary)
-      service:
-        name: keepalived
-        enabled: false
-        state: restarted
-      when: REPLICATION_PASSWORD is defined
-
-    - name: Install keepalived alert trigger code
-      copy: src=files/failover/ dest=/home/domjudge/ owner=domjudge group=domjudge
-      when: REPLICATION_PASSWORD is defined
+        #        #    - include: nginx-setup.yml
+        #
+        #    - name: Add documentation in DOMjudge team interface
+        #      copy: src=files/docs.yaml dest=/opt/domjudge/etc/docs.yaml
+        #
+        #    - name: Get NGINX status
+        #      copy: src=files/grafana/nginx-status.conf dest=/etc/nginx/sites-enabled/status.conf
+        #      notify: restart nginx
+        #
+        #    - name: Prometheus nginx exporter
+        #      lineinfile:
+        #        dest: /etc/default/prometheus-nginx-exporter
+        #        state: present
+        #        regexp: '^ARGS=""'
+        #        line: 'ARGS="-nginx.scrape-uri=http://localhost:8080/basic_status"'
+        #      notify: restart nginx-exporter
+        #
+        #    - name: Install PHP-fpm exporter binary
+        #      ansible.builtin.unarchive:
+        #        src: files/grafana/php-fpm_exporter_2.0.3_linux_amd64.tar.gz
+        #        dest: /usr/bin/
+        #        exclude:
+        #          - LICENSE
+        #          - README.md
+        #
+        #    - name: Export PHP-FPM metrics
+        #      copy: src=files/grafana/php-fpm-exporter.service dest=/etc/systemd/system/php-fpm-exporter.service
+        #      notify: restart php-exporter
+        #
+        #    - name: add autostart shortcuts
+        #      copy: src=files/{{item}}.desktop dest=/home/domjudge/.config/autostart/ owner=domjudge group=domjudge mode=0755
+        #      with_items:
+        #        - htop
+        #        - taillog-domserver-nginx-error
+        #        - taillog-domserver-symfony-error
+        #
+        #    - name: Configure keepalived for domjudge IP failover
+        #      template:
+        #        src: files/keepalived.conf.j2
+        #        dest: /etc/keepalived/keepalived.conf
+        #      when: REPLICATION_PASSWORD is defined
+        #
+        #    - name: Start but disable keepalived (so it does not fail back to primary)
+        #      service:
+        #        name: keepalived
+        #        enabled: false
+        #        state: restarted
+        #      when: REPLICATION_PASSWORD is defined
+        #
+        #    - name: Install keepalived alert trigger code
+        #      copy: src=files/failover/ dest=/home/domjudge/ owner=domjudge group=domjudge
+        #      when: REPLICATION_PASSWORD is defined
+        # 
+        ##    - include: nginx-setup.yml
+        ##
+        ##    - name: add autostart shortcuts
+        ##      copy: src=files/{{item}}.desktop dest=/home/domjudge/.config/autostart/ owner=domjudge group=domjudge mode=0755
+        ##      with_items:
+        ##        - htop
+        ##        - taillog-domserver-nginx-error
+        ##        - taillog-domserver-symfony-error
