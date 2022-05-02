@@ -1,0 +1,34 @@
+name: Test contest deployment (ansible scripts)
+
+on: [push,pull_request]
+
+jobs:
+  test_domjudge_role:
+    strategy:
+      matrix:
+        os: [22.04, 20.04]
+        role: [domserver]
+    runs-on: ubuntu-20.04
+    container: ubuntu:${{ matrix.os }}
+    
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: remove package
+        run: apt update; apt purge mysql-server -y
+      - name: Install ansible lint tools + SQL server
+        run: apt install ansible sudo make -y
+      - run: mount
+      #mariadb-server -y
+      #- name: Check that mariadb works
+      #  if: ${{ matrix.os == '22.04' }}
+      #  run: service mariadb restart; service mariadb status
+      - name: Setup the hosts file
+        working-directory: ./icpc-wf/ansible
+        run: sed -i 's/\[${{ matrix.role }}\]/[removed]/g' hosts; printf '\n[${{ matrix.role }}]\ngithub-action\tansible_host=localhost ansible_connection=local' >> hosts
+      - name: Generate insecure credentials
+        working-directory: ./icpc-wf/ansible
+        run: mv group_vars/all/secret.yml.example group_vars/all/secret.yml
+      - name: Run the default deployment method
+        working-directory: ./icpc-wf/ansible
+        run: make ${{ matrix.role }}
