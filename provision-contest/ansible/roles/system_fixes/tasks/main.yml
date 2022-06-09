@@ -1,0 +1,35 @@
+---
+# These tasks perform miscellaneous fixes to the base system.
+
+- name: set timezone
+  timezone:
+    name: "{{ TIMEZONE }}"
+
+- name: set PHP timezone for CLI
+  lineinfile:
+    dest: /etc/php/7.4/cli/php.ini
+    state: present
+    regexp: 'date\.timezone\s*='
+    line: 'date.timezone = {{ TIMEZONE }}'
+
+- name: enable bash completion globally
+  blockinfile:
+    path: /etc/bash.bashrc
+    insertafter: "# enable bash completion in interactive shells"
+    block: |
+      if ! shopt -oq posix; then
+        if [ -f /usr/share/bash-completion/bash_completion ]; then
+          . /usr/share/bash-completion/bash_completion
+        elif [ -f /etc/bash_completion ]; then
+          . /etc/bash_completion
+        fi
+      fi
+
+- name: Force enable alt-tab for switching windows
+  copy:
+    src: dconf/
+    dest: /etc/dconf/
+    owner: root
+    group: root
+    mode: 0755
+  notify: update dconf

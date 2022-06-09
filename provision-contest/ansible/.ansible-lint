@@ -1,0 +1,7 @@
+parseable: true
+skip_list:
+  - no-handler     # TODO: this might break existing playbooks
+  - meta-no-info   # We don't publish to galaxy (yet)
+  - fqcn-builtins  # I see no benefit as we dont use custom roles
+use_default_rules: true
+verbosity: 1

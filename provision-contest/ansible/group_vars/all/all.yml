@@ -1,0 +1,62 @@
+# Directory of the domjudge repository checkout.
+DJ_DIR: /opt/domjudge
+
+# Branch to checkout and use.
+DJ_BRANCH: main
+
+# Server VLAN IP prefix.
+SERVER_IP_PREFIX: 10.3.3
+
+# IP address of the admin machine used as ansible and git server.
+MAIN_ADMIN_IP: "{{SERVER_IP_PREFIX}}.223"
+
+# URL and IP of domserver from judgehosts. A hostname 'domserver' with
+# DOMSERVER_IP will be added to the judgehost /etc/hosts file.
+DOMSERVER: https://domjudge
+DOMSERVER_IP: "{{SERVER_IP_PREFIX}}.215"
+DOMSERVER_URL: "{{DOMSERVER}}"
+DOMSERVER_SSL_CERT: /etc/ssl/certs/domserver.crt
+DOMSERVER_SSL_KEY: /etc/ssl/private/domserver.key
+
+# Set this to true when you are using the ICPC World Finals Contest Image
+ICPC_IMAGE: false
+
+# Set this when on the blue network at the World Finals where no
+# internet access is available and "packages" must be used as APT repo
+# server.
+WF_RESTRICTED_NETWORK: false
+
+TIMEZONE: "Europe/Moscow"
+
+PHP_FPM_MAX_CHILDREN: 400
+PHP_FPM_MAX_REQUESTS: 500
+PHP_MEMORY_LIMIT: 1024M
+PHP_UPLOAD_MAX_FILESIZE: 256M
+PHP_POST_MAX_SIZE: 256M
+PHP_MAX_FILE_UPLOADS: 101
+
+# Git repo URL
+DJ_GIT_HOST: "{{MAIN_ADMIN_IP}}"
+DJ_GIT_REPO: "https://github.com/domjudge/domjudge.git"
+DJ_GIT_REPO_RESTRICTED: "domjudge@{{DJ_GIT_HOST}}:domjudge"
+DJ_GIT_REPO_SCRIPTS: "https://github.com/domjudge/domjudge-scripts.git"
+DJ_GIT_REPO_SCRIPTS_RESTRICTED: "domjudge@{{DJ_GIT_HOST}}:domjudge-scripts-bare"
+
+PHPSTORM_VERSION: 2021.2
+PHPSTORM_FULL_VERSION: 212.5284.49
+
+GRAFANA_MONITORING: false
+
+# Hostname of the CDS. If set, will add an nginx in front of the CDS
+# If not set, will only expose CDS directly
+CDS_HOSTNAME: cds
+
+#  CDS SSL cert and key. Only needed when CDS_HOSTNAME is set
+CDS_SSL_CERT: /etc/ssl/certs/cds.crt
+CDS_SSL_KEY: /etc/ssl/private/cds.key
+
+# Hostname of the static scoreboard
+STATIC_SCOREBOARD_HOSTNAME: scoreboard
+
+STATIC_SCOREBOARD_SSL_CERT: /etc/ssl/certs/scoreboard.crt
+STATIC_SCOREBOARD_SSL_KEY: /etc/ssl/private/scoreboard.key

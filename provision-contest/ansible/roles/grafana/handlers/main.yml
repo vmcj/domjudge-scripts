@@ -1,0 +1,32 @@
+---
+# Define here handlers associated to this role.
+
+- name: restart nginx-exporter
+  service:
+    name: prometheus-nginx-exporter
+    enabled: true
+    state: restarted
+
+- name: restart php-exporter
+  service:
+    name: php-fpm-exporter
+    enabled: true
+    state: restarted
+
+- name: restart nginx
+  service:
+    name: nginx
+    enabled: true
+    state: restarted
+
+- name: restart grafana
+  service:
+    name: grafana-server
+    enabled: true
+    state: restarted
+
+- name: restart loki
+  service:
+    name: loki
+    enabled: true
+    state: restarted

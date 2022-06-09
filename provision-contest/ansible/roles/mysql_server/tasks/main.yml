@@ -1,0 +1,69 @@
+---
+# These tasks install and configure a MySQL server
+
+- name: install mysql packages
+  apt:
+    state: present
+    pkg:
+      - mariadb-server
+      - python3-mysqldb
+      - mycli
+
+- name: copy in MySQL config
+  copy:
+    src: my.cnf
+    dest: /root/.my.cnf
+    mode: 0644
+    owner: root
+    group: root
+
+- name: create directory for systemd mysql settings
+  file:
+    path: /etc/systemd/system/mysql.service.d/
+    state: directory
+    group: root
+    owner: root
+    mode: 0755
+
+- name: update systemd so mysql has bigger limits
+  copy:
+    src: mysql.override.cnf
+    dest: /etc/systemd/system/mysql.service.d/override.conf
+    mode: 0644
+    group: root
+    owner: root
+  notify: restart mysql
+
+- name: add mysql config snippet to increase limits
+  copy:
+    src: mysql.domjudge.cnf
+    dest: /etc/mysql/mariadb.conf.d/zz_domjudge.cnf
+    mode: 0644
+    owner: root
+    group: root
+  notify: restart mysql
+
+- name: make sure mysql is restarted
+  meta: flush_handlers
+
+- name: create directory to store scripts & database dumps
+  file:
+    path: /home/domjudge/{{ item }}
+    owner: domjudge
+    group: domjudge
+    state: directory
+    mode: 0755
+  loop:
+    - db-dumps
+    - bin
+
+- name: copy database dump/load scripts
+  copy:
+    src: "{{ item }}"
+    dest: /home/domjudge/bin/{{ item }}
+    owner: domjudge
+    group: domjudge
+    mode: 0755
+  loop:
+    - load-db
+    - dump-db

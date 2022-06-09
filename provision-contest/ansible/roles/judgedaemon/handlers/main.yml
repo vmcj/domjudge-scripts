@@ -1,0 +1,29 @@
+---
+# Define here handlers associated to this role.
+
+- name: enable and restart tune_cpu
+  systemd:
+    name: tune_cpu
+    enabled: true
+    state: restarted
+    daemon_reload: true
+
+- name: enable and restart create-cgroups
+  service:
+    name: create-cgroups
+    enabled: true
+    state: restarted
+    daemon_reload: true
+
+- name: enable and restart judgedaemon
+  service:
+    name: "domjudge-judgehost.target"
+    enabled: true
+    state: restarted
+    daemon_reload: true
+
+- name: update grub
+  command: update-grub
+
+- name: reboot
+  reboot:
