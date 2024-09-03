@@ -1,5 +1,4 @@
 ---
-script_server_url: https://github.com/bugy/script-server/releases/download/1.18.0/script-server.zip
 script_server_port: 5000
 
 script_server_admin_users: &admin_users
