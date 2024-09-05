@@ -2,13 +2,13 @@
     "title": "sysops script server",
     "port": {{ script_server_port }},
     "access": {
-        "trusted_ips": [
+        "other_trusted_ips": [
             {%- for host in groups['onprem'] -%}
             "{{ hostvars[host].ansible_host}}",
             {% endfor %}
             "127.0.0.1"
         ],
-        "allowed_users": [
+        "other_allowed_users": [
             {%- for host in groups['onprem'] -%}
             "{{ hostvars[host].ansible_host}}",
             {% endfor %}
@@ -19,7 +19,7 @@
             "{{ hostvars[host].ansible_host}}",
             {% endfor %}
             "127.0.0.1"
-	}
+	]
     },
     "logging": {
         "execution_file": "$DATE-$ID.log",

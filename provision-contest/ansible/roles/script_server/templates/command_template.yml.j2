@@ -1,6 +1,6 @@
 ---
 {% set _unused_content = item.pop('content') %}
-{% set parameters = item.pop('parameters') %}
+{% set parameters = item.pop('parameters', []) %}
 {% set admin_users = groups['admin'] %}
 {% set allowed_users = groups['onprem'] %}
 {# set admin_users = (admin_users if ( admin_users | type_debug == "list" ) else [admin_users]) #}
@@ -10,6 +10,7 @@
   combine(item) |
   to_nice_yaml
 }}
+
 {% if admin_users %}
 admin_users:
   - 127.0.0.1
@@ -18,7 +19,7 @@ admin_users:
 {% endfor %}
 {% endif %}
 {% if allowed_users %}
-allowed_users:
+skipped_allowed_users:
   - 127.0.0.1
 {% for u in (allowed_users + admin_users)|unique %}
   - {{ hostvars[u].ansible_host }}

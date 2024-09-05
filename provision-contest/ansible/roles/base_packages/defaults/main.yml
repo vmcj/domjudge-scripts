@@ -5,6 +5,8 @@ REMOVED_PACKAGES:
 INSTALLED_PACKAGES:
   - ack
   - acl
+  - ansible
+  - ansible-lint
   - apache2-utils
   - autoconf
   - automake

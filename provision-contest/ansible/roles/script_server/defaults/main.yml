@@ -2,24 +2,91 @@
 script_server_port: 5000
 
 script_server_commands:
-  - name: run-ping
-    description: Checks if we can connect the host
-    group: ansible # for organization in script-server
-    allowed_users:
-      - backup # or 10.3.3.210 (the ansible template will resolve names to IPs)
+  - name: make-invocations
+    description: Run the make targets as last years
+    parameters:
+      - name: make_pattern
+        type: multiselect
+        separator: ' '
+        values: 
+          - admin
+          - domserver
+          - judgehost
+          - grafana
+          - cds
     content: |
-      #!/usr/bin/bash
-      echo "hello world $HOSTPATTERN"
+      #!/bin/bash
+      set -euxo pipefail
+      if [ "$make_pattern" = "" ]; then
+        exit 1
+      fi
+      cd /home/domjudge/domjudge-scripts-checkout/provision-contest/ansible
+      for make_single in $make_pattern; do
+        make "$make_single"
+      done
+  - name: ansible-admin
+    description: (Re)configure the (other) admin machines
+    content: |
+      #!/bin/bash
+      set -euxo pipefail
+      if [ "$host_pattern" = "" ]; then
+        exit 1
+      fi
+      if [ "$tag_pattern" != "" ]; then
+        tag="--tags $tag_pattern"
+      fi
+      cd /home/domjudge/domjudge-scripts-checkout/provision-contest/ansible
+      ansible-playbook --limit $host_pattern ${tag:-} admin.yml
     parameters:
       - name: host_pattern
         # pass_as: env_variable # this is default
         # env_var: host_pattern # default is same as name
-        type: list
-        values:
-          - all
-          - domserver
-          - judgehost
-          - admin
+        type: multiselect
+        values: "{{ groups['admin'] }}"
+        default: "{{ groups['admin'] | difference(['domjudge-ccsadmin2']) }}"
+      - name: tag_pattern
+        type: "multiselect"
+        values: ["reboot"]
+        default: []
+  #- name: run-ping
+  #  description: Checks if we can connect the host
+  #  group: ansible # for organization in script-server
+  #  content: |
+  #    #!/usr/bin/bash
+  #    echo "hello world $HOSTPATTERN"
+  #  parameters:
+  #    - name: host_pattern
+  #      # pass_as: env_variable # this is default
+  #      # env_var: host_pattern # default is same as name
+  #      type: list
+  #      values:
+  #        - all
+  #        - domserver
+  #        - judgehost
+  #        - admin
+
+  #- name: run-domserver
+  #  description: Deploy the domserver
+  #  #group: domserver # for organization in script-server
+  #  content: |
+  #    #!/usr/bin/bash
+  #    echo "hello world $HOSTPATTERN"
+  #  parameters:
+  #    - name: host_pattern
+  #      # pass_as: env_variable # this is default
+  #      # env_var: host_pattern # default is same as name
+  #      type: multiselect
+  #      values:
+  #        - 'domjudge-primary'
+  #        - 'domjudge-emergency'
+  #    - name: tag_pattern
+  #      # pass_as: env_variable # this is default
+  #      # env_var: host_pattern # default is same as name
+  #      type: multiselect
+  #      values:
+  #        - 'code-only'
+  #        - 'poweroff'
+  #        - 'all'
 
 script_server_command_defaults:
   output_format: terminal
