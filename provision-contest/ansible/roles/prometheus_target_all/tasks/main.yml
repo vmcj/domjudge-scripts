@@ -56,6 +56,17 @@
     line: 'ARGS="--web.config /etc/prometheus/prometheus-authentication.yml"'
   notify: Restart node-exporter
 
+- name: Setup rsyslog
+  block:
+    - name: Install rsyslog
+      apt:
+        name: rsyslog
+
+    - name: Send all logs to the admin machines
+      template:
+        src: rsyslog-remote.conf.j2
+        dest: /etc/rsyslog.d/71-admin.conf
+    
 # Setup promtail which sends our logs
 - name: Setup promtail to ship logs to loki (and grafana)
   when: prom
@@ -109,3 +120,4 @@
         name: promtail
         state: started
         enabled: true
+

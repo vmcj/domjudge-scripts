@@ -23,3 +23,5 @@
       tags: grafana
     - role: script_server
       tags: script_server
+    #- role: sentry
+    #  tags: sentry

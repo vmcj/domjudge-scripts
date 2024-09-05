@@ -1,4 +1,4 @@
-prom: true
+prom: false
 GROUP_PREFIXES:
   - 'online-'
   - ''
