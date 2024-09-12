@@ -38,32 +38,32 @@ wfinal-judgehost
 [wfinal-judgehost]
 domjudge-judgehost1  ansible_host=10.2.2.192
 domjudge-judgehost2  ansible_host=10.2.2.193
-domjudge-judgehost3  ansible_host=10.2.2.194
-domjudge-judgehost4  ansible_host=10.2.2.195
-domjudge-judgehost5  ansible_host=10.2.2.196
-domjudge-judgehost6  ansible_host=10.2.2.197
-domjudge-judgehost7  ansible_host=10.2.2.198
-domjudge-judgehost8  ansible_host=10.2.2.199
-domjudge-judgehost9  ansible_host=10.2.2.200
-domjudge-judgehost10 ansible_host=10.2.2.201
-domjudge-judgehost11 ansible_host=10.2.2.202
-domjudge-judgehost12 ansible_host=10.2.2.203
-domjudge-judgehost13 ansible_host=10.2.2.204
-domjudge-judgehost14 ansible_host=10.2.2.205
-domjudge-judgehost15 ansible_host=10.2.2.206
-domjudge-judgehost16 ansible_host=10.2.2.207
+#domjudge-judgehost3  ansible_host=10.2.2.194
+#domjudge-judgehost4  ansible_host=10.2.2.195
+#domjudge-judgehost5  ansible_host=10.2.2.196
+#domjudge-judgehost6  ansible_host=10.2.2.197
+#domjudge-judgehost7  ansible_host=10.2.2.198
+#domjudge-judgehost8  ansible_host=10.2.2.199
+#domjudge-judgehost9  ansible_host=10.2.2.200
+#domjudge-judgehost10 ansible_host=10.2.2.201
+#domjudge-judgehost11 ansible_host=10.2.2.202
+#domjudge-judgehost12 ansible_host=10.2.2.203
+#domjudge-judgehost13 ansible_host=10.2.2.204
+#domjudge-judgehost14 ansible_host=10.2.2.205
+#domjudge-judgehost15 ansible_host=10.2.2.206
+#domjudge-judgehost16 ansible_host=10.2.2.207
 
 [analyst-judgehost]
-green-judgehost1     ansible_host=172.29.1.221   
-green-judgehost2     ansible_host=172.29.1.222   
-green-judgehost3     ansible_host=172.29.1.223   
+#green-judgehost1     ansible_host=172.29.1.221
+#green-judgehost2     ansible_host=172.29.1.222
+#green-judgehost3     ansible_host=172.29.1.223
 
 [admin]
 domjudge-ccsadmin1 ansible_host=10.3.3.224
 domjudge-ccsadmin2 ansible_host=10.3.3.225
-domjudge-ccsadmin3 ansible_host=10.3.3.226
-domjudge-ccsadmin4 ansible_host=10.3.3.227
-domjudge-ccsadmin5 ansible_host=10.3.3.228
+#domjudge-ccsadmin3 ansible_host=10.3.3.226
+#domjudge-ccsadmin4 ansible_host=10.3.3.227
+#domjudge-ccsadmin5 ansible_host=10.3.3.228
 
 [grafana]
 # During the WFs we use one of the ccsadmin machines
@@ -73,10 +73,10 @@ domjudge-ccsadmin2 ansible_host=10.3.3.225
 [analyst-domserver]
 # Discuss if we can have this host dualhomed in blue to make management easier.\
 # Looking at the IP sheet that would mean that our emergency laptop needs to move.
-domjudge-analyst     ansible_host=172.29.1.240
+#domjudge-analyst     ansible_host=172.29.1.240
 
 [online-domserver]
-online-domserver       ansible_host=192.168.255.255
+#online-domserver       ansible_host=192.168.255.255
 
 [online-judgehost]
-online-judgehost1      ansible_host=192.168.255.255
+#online-judgehost1      ansible_host=192.168.255.255
